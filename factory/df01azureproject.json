@@ -1,0 +1,15 @@
+{
+	"name": "df01azureproject",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Disabled",
+			"editable": true
+		}
+	},
+	"location": "francecentral",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "a24f7aa7-5c23-4ef7-83a6-d88758777272",
+		"tenantId": "b0abd1ed-4966-4274-9f19-59dd663e81f5"
+	}
+}
