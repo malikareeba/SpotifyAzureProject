@@ -64,7 +64,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "parquet_dynamic",
+						"referenceName": "Parquet_dynamic",
 						"type": "DatasetReference",
 						"parameters": {
 							"container": "bronze",
@@ -109,7 +109,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"container": "bronze",
-							"folder": "cdc_",
+							"folder": "cdc",
 							"file": "cdc.json"
 						}
 					},
@@ -165,7 +165,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"dataset": {
-									"referenceName": "parquet_dynamic",
+									"referenceName": "Parquet_dynamic",
 									"type": "DatasetReference",
 									"parameters": {
 										"container": "bronze",
@@ -173,7 +173,10 @@
 											"value": "@pipeline().parameters.table",
 											"type": "Expression"
 										},
-										"file": "@concat(pipeline().parameters.table,'_',variables('current'))"
+										"file": {
+											"value": "@concat(pipeline().parameters.table,'_',variables('current'))",
+											"type": "Expression"
+										}
 									}
 								},
 								"enableLogging": false,
@@ -235,7 +238,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"container": "bronze",
-										"folder": "cdc_",
+										"folder": "cdc",
 										"file": "empty.json"
 									}
 								}
@@ -246,7 +249,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"container": "bronze",
-										"folder": "cdc_",
+										"folder": "cdc",
 										"file": "cdc.json"
 									}
 								}
