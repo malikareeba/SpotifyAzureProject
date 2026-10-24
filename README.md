@@ -1,457 +1,392 @@
 # 🎵 Spotify Azure Data Engineering Project
 
-### End-to-End Data Engineering Pipeline | Azure Data Factory | Azure Databricks | PySpark | Delta Lake
-
-![Azure](https://img.shields.io/badge/Microsoft_Azure-0089D6?style=for-the-badge&logo=microsoftazure&logoColor=white)
-![Azure Data Factory](https://img.shields.io/badge/Azure_Data_Factory-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white)
-![Databricks](https://img.shields.io/badge/Azure_Databricks-FF3621?style=for-the-badge&logo=databricks&logoColor=white)
-![PySpark](https://img.shields.io/badge/PySpark-FDEE21?style=for-the-badge&logo=apachespark&logoColor=black)
-![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![SQL](https://img.shields.io/badge/SQL-4479A1?style=for-the-badge&logo=postgresql&logoColor=white)
-![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
+An end-to-end data engineering project built using **Azure Data Factory, Azure SQL Database, Azure Data Lake Storage, Azure Databricks, PySpark, and Delta Lake**. This project demonstrates how to build automated data pipelines for Spotify streaming data using the Medallion Architecture, incremental ingestion, data transformation, and dimensional data modelling.
 
 ## 📌 Project Overview
 
-The **Spotify Azure Data Engineering Project** is an end-to-end data engineering solution built to demonstrate how Spotify streaming data can be ingested, processed, transformed, and prepared for analytics using Microsoft Azure services.
+The goal of this project was to design and implement a complete data engineering pipeline that ingests Spotify data, processes it through Bronze, Silver, and Gold layers, and prepares analytics-ready datasets.
 
-The project follows the **Medallion Architecture**—Bronze, Silver, and Gold layers. Azure Data Factory orchestrates data ingestion, while Azure Databricks and PySpark are used for data cleaning, transformation, and incremental processing. The Gold layer uses dimensional modelling, with four dimension tables and one fact table for users, artists, tracks, and streaming activity.
+The project brings together the data engineering concepts I learned during my **#100DaysOfDataEngineering** journey and applies them in an end-to-end cloud project.
 
-The project brings together practical data engineering concepts including incremental data loading, metadata-driven workflows, backfilling, parameterisation, looping, Delta Lake, Slowly Changing Dimensions (SCDs), and data quality checks.
+### 🎯 Project Objectives
 
-## 🎯 Project Objectives
-
-- Build an end-to-end data pipeline using Azure data engineering services.
-- Ingest Spotify data from five source tables.
-- Implement initial and incremental ingestion workflows using Azure Data Factory.
-- Develop reusable and parameterised pipelines.
-- Implement looping and backfilling functionality.
-- Apply the Bronze, Silver, and Gold Medallion Architecture.
-- Clean, deduplicate, and transform data using PySpark.
-- Use Delta Lake for storage and incremental processing.
-- Design a Gold-layer star schema with fact and dimension tables.
-- Apply data quality checks and SCD concepts.
-- Explore Databricks capabilities for streaming, governance, and deployment.
-- Manage project code and configurations using GitHub.
+- Build an end-to-end data ingestion pipeline using Azure Data Factory.
+- Use Azure SQL Database as a source for Spotify data.
+- Implement initial and incremental data loading.
+- Develop reusable, parameterized pipelines with looping and backfilling capabilities.
+- Store raw and processed data in Azure Data Lake Storage.
+- Transform data using Azure Databricks and PySpark.
+- Implement Delta Lake processing and data quality checks.
+- Design a dimensional model with fact and dimension tables.
+- Configure automated email notifications for pipeline failures.
+- Explore advanced data engineering concepts, including Structured Streaming, Auto Loader, Unity Catalog, Delta Live Tables, and Databricks Asset Bundles.
 
 ## 🏗️ Architecture
 
+The project follows the **Medallion Architecture**, organizing data into three layers.
+
 ```text
-                 Spotify Source Data
-                          |
-                          v
-                 Azure SQL Database
-                          |
-                          v
-                  Azure Data Factory
-                          |
-             +------------+------------+
-             |                         |
-             v                         v
-        Initial Load             Incremental Load
-             |                         |
-             +------------+------------+
-                          |
-                          v
-                   BRONZE LAYER
-                  Raw Ingested Data
-                          |
-                          v
-                  AZURE DATABRICKS
-                     PySpark
-                          |
-                          v
-                   SILVER LAYER
-             Cleaned and Transformed Data
-             Deduplication and Validation
-                          |
-                          v
-                    GOLD LAYER
-               Dimensional Data Model
-                          |
-               +----------+----------+
-               |                     |
-               v                     v
-         Dimension Tables        Fact Table
-          4 Dimensions       Streaming Activity
-               |                     |
-               +----------+----------+
-                          |
-                          v
-                 Analytics-Ready Data
+             Spotify Source Data
+                      |
+                      v
+             Azure SQL Database
+                      |
+                      v
+             Azure Data Factory
+       Initial & Incremental Ingestion
+       Parameterization, Looping,
+          Backfilling and CDC
+                      |
+                      v
+          Azure Data Lake Storage
+                      |
+                      v
+              BRONZE LAYER
+              Raw Data Storage
+                      |
+                      v
+             AZURE DATABRICKS
+                 PySpark
+                      |
+                      v
+              SILVER LAYER
+       Cleaning, Deduplication,
+       Data Types and Transformation
+                      |
+                      v
+               GOLD LAYER
+        Dimensional Data Modelling
+          Fact and Dimension Tables
+                      |
+                      v
+            Analytics-Ready Data
+
+       Azure Logic Apps + Gmail
+       Pipeline Failure Notifications
 ```
 
-*This diagram represents the logical data flow. Exact storage paths, connections, and deployment configurations depend on the Azure environment.*
+*Note: The diagram represents the project's logical architecture. The exact implementation of individual advanced features may vary.*
 
-## 🖼️ Project Screenshots
+## 🥉 Bronze Layer — Data Ingestion
 
-The screenshots below document the Azure resources, Azure Data Factory workflows, Logic Apps integration, and Databricks data model used during the project.
+The Bronze layer is responsible for ingesting and storing raw data from the source system.
+
+### Key Features
+
+- Azure Data Factory pipelines for data ingestion.
+- Azure SQL Database as the source.
+- Azure Data Lake Storage as the data lake destination.
+- Initial loading to ingest the source data.
+- Incremental loading to process new or changed records.
+- Parameterized pipelines to support reusable ingestion workflows.
+- Looping to process multiple datasets.
+- Backfilling to support historical data processing.
+- Change Data Capture (CDC) concepts for tracking data changes.
+
+The project includes two primary ingestion pipelines:
+
+- `incremental_ingestion`
+- `incremental_loop`
+
+These pipelines demonstrate how ingestion workflows can be made more dynamic and reusable instead of building separate pipelines for every dataset.
+
+## 🥈 Silver Layer — Data Transformation
+
+The Silver layer processes the raw data using **Azure Databricks and PySpark**.
+
+### Key Transformations
+
+- Data cleaning and standardization.
+- Data type handling.
+- Removal of unnecessary columns.
+- Duplicate record removal.
+- Data transformation and validation.
+- Incremental processing using Delta Lake.
+- Preparation of structured data for analytical modelling.
+
+Delta Lake supports reliable data storage and processing, while PySpark provides scalable transformation capabilities.
+
+## 🥇 Gold Layer — Analytics and Dimensional Modelling
+
+The Gold layer contains business-ready datasets designed for reporting and analytical use cases.
+
+The project uses dimensional data modelling to organize Spotify streaming data into fact and dimension tables.
+
+### Dimensional Model
+
+The planned analytical model consists of four dimension tables and one fact table.
+
+| Table | Purpose |
+|---|---|
+| `DimUser` | Stores user-related attributes. |
+| `DimArtist` | Stores artist-related attributes. |
+| `DimTrack` | Stores track-related attributes. |
+| `DimDate` | Stores date-related attributes for time-based analysis. |
+| `FactStream` | Stores streaming activity and measurable streaming events. |
+
+The fact table connects to the dimension tables through keys, allowing analytical queries across users, artists, tracks, and dates.
+
+### Concepts Applied
+
+- Star schema design.
+- Fact and dimension tables.
+- Surrogate and foreign keys where applicable.
+- Slowly Changing Dimensions (SCD).
+- Incremental data processing.
+- Data quality validation.
+
+## 🔄 Initial and Incremental Loading
+
+An important part of this project is understanding how data pipelines handle both historical and newly available data.
+
+### Initial Load
+
+The initial load ingests the existing source data into the data lake.
+
+The project includes an initial-load SQL script containing approximately **2,865 INSERT statements**.
+
+### Incremental Load
+
+The incremental load processes new or changed data rather than repeatedly reloading the entire source dataset.
+
+The project includes an incremental-load SQL script containing approximately **470 INSERT statements**.
+
+The pipeline uses lookup and SQL activities to retrieve change-tracking information and conditionally process incremental data.
+
+### Backfilling
+
+Backfilling allows historical data to be processed for a selected period or range when required.
+
+### Looping
+
+The looping pipeline uses reusable activities to process multiple datasets or inputs dynamically.
+
+These approaches help improve pipeline maintainability and reduce unnecessary data processing.
+
+## 📧 Pipeline Monitoring and Email Notifications
+
+Azure Logic Apps is integrated with the pipeline workflow to support email notifications.
+
+The Logic App uses an HTTP request trigger and an email action. The workflow can receive pipeline details, including:
+
+- Pipeline name.
+- Pipeline run ID.
+
+This provides a way to notify the relevant recipient when a pipeline failure occurs and makes troubleshooting easier.
+
+## 🛠️ Technologies Used
+
+| Technology | Purpose |
+|---|---|
+| Azure Data Factory | Data ingestion and pipeline orchestration. |
+| Azure SQL Database | Source database for Spotify data. |
+| Azure Data Lake Storage | Storage for raw and processed data. |
+| Azure Databricks | Data processing and transformation. |
+| PySpark | Distributed data transformation. |
+| Python | Utility functions and workflow logic. |
+| SQL | Source data loading and database operations. |
+| Delta Lake | Reliable data storage and incremental processing. |
+| Spark Structured Streaming | Streaming data processing concepts. |
+| Auto Loader | Incremental file ingestion in Databricks. |
+| Unity Catalog | Data governance and catalog management concepts. |
+| Delta Live Tables | Managed data pipeline concepts. |
+| Jinja2 | Template-driven, metadata-based processing. |
+| Databricks Asset Bundles | Deployment and project configuration concepts. |
+| Azure Logic Apps | Workflow automation and email notifications. |
+| GitHub | Source control and project documentation. |
+
+## 📂 Repository Structure
+
+The repository contains the following Azure Data Factory configuration files, SQL scripts, and supporting resources.
+
+```text
+SpotifyAzureProject/
+│
+├── dataset/
+│   ├── Json_dynamic.json
+│   ├── Parquet_dynamic.json
+│   └── azure_sql.json
+│
+├── factory/
+│   └── df01azureproject.json
+│
+├── images/
+│   ├── azure-resources-dashboard.jpg
+│   ├── adf-incremental-ingestion-overview.jpg
+│   ├── adf-incremental-loop-pipeline.jpg
+│   ├── adf-incremental-loop-activities.jpg
+│   ├── adf-pipeline-run-success.jpg
+│   ├── logic-app-http-email-workflow.jpg
+│   └── databricks-silver-gold-tables.jpg
+│
+├── linkedService/
+│   ├── azure_sql.json
+│   └── datalake.json
+│
+├── pipeline/
+│   ├── incremental_ingestion.json
+│   └── incremental_loop.json
+│
+├── source_scripts/
+│   ├── spotify_incremental_load (1).sql
+│   └── spotify_initial_load (2).sql
+│
+├── README.md
+├── cdc.json
+├── empty.json
+├── loop_input
+└── publish_config.json
+```
+
+*The image filenames above are the recommended names for the screenshots. Ensure the files in your `images/` folder use these exact names, or update the corresponding image links below.*
+
+## 📸 Project Screenshots
+
+The following screenshots document the Azure resources, ingestion workflows, pipeline execution, notification setup, and Databricks work.
 
 ### 1. Azure Resources
 
-This screenshot shows the Azure resources configured for the project, including Azure SQL Database, Azure Data Factory, Azure Databricks, storage, and Logic Apps.
+The Azure environment contains the resources used to build the project, including Azure Data Factory, Azure SQL Database, Azure Databricks, and storage resources.
 
 ![Azure resources dashboard](images/azure-resources-dashboard.jpg)
 
-### 2. Bronze Layer and Incremental Ingestion
+### 2. Incremental Ingestion Pipeline
 
-The Azure Data Factory pipeline uses a lookup to retrieve the last CDC value, sets the current value, copies source data to the lake, and checks whether incremental data is available. Depending on the condition, the workflow updates the CDC value or performs the configured cleanup step.
+The ingestion workflow uses lookup, copy, and conditional activities to process data incrementally.
 
 ![Azure Data Factory incremental ingestion overview](images/adf-incremental-ingestion-overview.jpg)
 
 ### 3. Incremental Loop Pipeline
 
-The loop workflow coordinates ingestion activities and invokes alerting logic after the loop execution path. The exact outcome depends on the activity dependency conditions configured in the pipeline.
+The looping workflow supports reusable processing across multiple inputs.
 
 ![Azure Data Factory incremental loop pipeline](images/adf-incremental-loop-pipeline.jpg)
 
-### 4. Pipeline Activities and Run Results
+### 4. Pipeline Activities and CDC Logic
 
-The pipeline includes lookup, copy, conditional processing, CDC update, and alert activities. The captured run output shows successful activity statuses for the displayed run.
+The pipeline uses lookup and variable activities, data copying, conditional processing, and change-tracking logic to control incremental ingestion.
 
-![Azure Data Factory loop activities](images/adf-incremental-loop-activities.jpg)
+![Azure Data Factory incremental loop activities](images/adf-incremental-loop-activities.jpg)
 
-![Azure Data Factory pipeline run output](images/adf-pipeline-run-success.jpg)
+### 5. Pipeline Execution
 
-### 5. Logic Apps Email Notification
+The Azure Data Factory monitoring view shows pipeline execution details and activity statuses. Successful runs and failure notifications can be used to monitor and troubleshoot the workflow.
 
-The Logic App uses an HTTP request trigger and a Gmail **Send email (V2)** action. The request body schema includes the pipeline name and pipeline run ID, enabling a caller to provide run details for an email notification.
+![Azure Data Factory pipeline execution](images/adf-pipeline-run-success.jpg)
 
-![Logic Apps HTTP trigger and email workflow](images/logic-app-http-email-workflow.jpg)
+### 6. Logic Apps Email Notifications
 
-### 6. Databricks Silver and Gold Data Model
+The Logic App workflow uses an HTTP request trigger and an email action to support pipeline notifications.
 
-The Databricks workspace screenshot shows data engineering notebook code and the catalog/table browser, including Silver-layer dimension and fact tables. The displayed notebook contains date-dimension and streaming fact processing.
+![Azure Logic Apps HTTP and email workflow](images/logic-app-http-email-workflow.jpg)
 
-![Databricks Silver and Gold tables](images/databricks-silver-gold-tables.jpg)
+### 7. Databricks Silver and Gold Layers
 
-> **🟩 If you rename an image:** update the corresponding Markdown image path in this README to match the new filename. For example, if `images/azure-resources-dashboard.jpg` is renamed, change the path in `![Azure resources dashboard](images/azure-resources-dashboard.jpg)` too.
+The Databricks workspace supports data transformation and dimensional modelling, including the date dimension and streaming fact table.
 
-## 🥉 1. Bronze Layer — Data Ingestion
+![Azure Databricks Silver and Gold tables](images/databricks-silver-gold-tables.jpg)
 
-The Bronze layer ingests raw Spotify source data using Azure Data Factory. Its purpose is to establish a repeatable ingestion process and retain source data for downstream processing.
-
-### Key implementations
-
-- Initial data ingestion from five source tables.
-- Incremental ingestion for subsequent processing.
-- SQL-based source ingestion scripts.
-- Azure Data Factory pipeline orchestration.
-- Parameterised pipeline execution.
-- Reusable pipeline logic using looping.
-- Backfilling support for historical data processing.
-
-### Ingestion details
-
-| Component | Details |
-|---|---|
-| Source tables | 5 |
-| Initial-load SQL `INSERT` statements | 2,865 |
-| Incremental-load SQL `INSERT` statements | 470 |
-| Orchestration | Azure Data Factory |
-| Source database | Azure SQL Database |
-
-The initial-load scripts support first-time ingestion, while the incremental-load scripts support subsequent runs. Incremental processing can reduce the need for repeated full reloads when the configured logic identifies only new or changed records.
-
-## 🥈 2. Silver Layer — Data Cleaning and Transformation
-
-The Silver layer uses Azure Databricks and PySpark to transform raw ingested data into cleaner, more consistent datasets.
-
-### Key implementations
-
-- Data cleaning and standardisation.
-- Data type handling.
-- Removal of unnecessary columns.
-- Deduplication.
-- PySpark-based transformations.
-- Incremental data processing.
-- Delta Lake integration.
-- Data quality checks.
-
-**Technologies:** Azure Databricks, PySpark, Python, and Delta Lake.
-
-The project also explores Auto Loader and Spark Structured Streaming for incremental file ingestion and streaming-oriented data processing.
-
-## 🥇 3. Gold Layer — Dimensional Data Modelling
-
-The Gold layer organises processed data into business-oriented datasets. A star schema was designed with **four dimension tables and one fact table**.
-
-| Table | Purpose |
-|---|---|
-| `dim_users` | Descriptive information about users |
-| `dim_artists` | Descriptive information about artists |
-| `dim_tracks` | Descriptive information about tracks |
-| `dim_date` | Date-related attributes for time-based analysis |
-| `fact_streaming` | Streaming activity and associated dimension keys |
-
-*These names are illustrative. Replace them with the actual table names used in your implementation if they differ.*
-
-### Key concepts
-
-- Star schema design.
-- Fact and dimension tables.
-- Dimensional data modelling.
-- Slowly Changing Dimensions (SCDs).
-- Incremental data loading.
-- Data quality validation.
-- Preparation of analytics-ready datasets.
-
-The model can support analysis across users, artists, tracks, and dates, depending on the fields available in the source data.
-
-## ⚙️ Azure Data Factory Workflows
-
-Azure Data Factory orchestrates ingestion and coordinates data movement through the pipeline.
-
-### Initial load
-
-The initial-load workflow processes the source data for first-time ingestion.
-
-### Incremental load
-
-The incremental-load workflow processes subsequent changes according to the configured source queries and change-tracking logic.
-
-### Metadata-driven processing
-
-Metadata-driven pipeline concepts make ingestion logic reusable across multiple configured source tables, reducing duplicated hardcoded workflows.
-
-### Parameterisation and looping
-
-Parameters and looping allow the same ingestion logic to run for different configured tables or inputs.
-
-### Backfilling
-
-Backfilling supports historical data processing or reprocessing according to the pipeline configuration.
-
-### Logic Apps integration
-
-Logic Apps integration with Azure Data Factory was explored to understand how Azure services can work together in automated workflows. The captured Logic App uses an HTTP request trigger and an email action.
-
-## 🔄 Incremental Data Processing
-
-The general workflow is:
-
-1. Configure the source and ingestion parameters.
-2. Run the initial load to ingest the required source data.
-3. Run incremental ingestion for subsequent changes.
-4. Process ingested data through the Bronze and Silver layers.
-5. Apply transformations and update downstream datasets according to the configured logic.
-6. Validate processed data using the implemented quality checks.
-
-The exact incremental logic depends on the source queries, change tracking, and pipeline configuration.
-
-## 🧩 Metadata-Driven PySpark and Jinja2 Workflows
-
-The project incorporates metadata-driven processing concepts using PySpark and Jinja2 to support reusable transformation logic.
-
-Key concepts include:
-
-- Reusable processing templates.
-- Parameterised transformations.
-- Looping through configured inputs.
-- Separation of processing logic from configuration.
-- Backfilling support.
-- Reduced duplication across workflows.
-
-## 🗄️ Delta Lake and Databricks Capabilities
-
-| Technology | Purpose |
-|---|---|
-| Delta Lake | Reliable data storage and incremental data operations |
-| Auto Loader | Incremental ingestion of files from supported cloud storage |
-| Spark Structured Streaming | Stream-processing capabilities |
-| Delta Live Tables | Declarative data pipeline development |
-| Unity Catalog | Centralised data governance and access management |
-| Databricks Asset Bundles | Databricks project configuration and deployment |
-| Jinja2 | Template-based processing logic |
-| PySpark | Distributed data processing and transformation |
-
-These technologies represent capabilities incorporated into or explored during the project. Not every item should be interpreted as a separately deployed production component.
-
-## 🛠️ Technology Stack
-
-**Cloud and data engineering**
-- Microsoft Azure
-- Azure Data Factory
-- Azure SQL Database
-- Azure Databricks
-- Delta Lake
-
-**Programming and processing**
-- Python
-- PySpark
-- SQL
-- Jinja2
-
-**Data engineering concepts**
-- Medallion Architecture
-- Incremental data loading
-- Metadata-driven pipelines
-- Backfilling
-- Parameterisation and looping
-- Dimensional data modelling
-- Slowly Changing Dimensions
-- Data quality checks
-- Spark Structured Streaming
-- Auto Loader
-
-**Governance and deployment**
-- Unity Catalog
-- Delta Live Tables
-- Databricks Asset Bundles
-- Git and GitHub
-
-## 📁 Repository Structure
-
-```text
-SpotifyAzureProject/
-├── dataset/             # Dataset definitions and configuration
-├── factory/             # Azure Data Factory factory configuration
-├── linkedService/       # Linked service definitions
-├── pipeline/            # Pipeline definitions and orchestration
-├── source_scripts/      # SQL source and ingestion scripts
-├── cdc.json             # CDC-related configuration
-├── empty.json           # Supporting JSON configuration
-├── loop_input           # Loop input configuration
-├── publish_config.json  # Publish-related configuration
-├── images/              # Project screenshots used in this README
-└── README.md             # Project documentation
-```
-
-The repository also includes Silver- and Gold-layer code in the `adf_publish` branch, as described in the project documentation. The exact contents of each folder may evolve over time.
-
-## 🚀 Getting Started
+## 🚀 How to Explore the Project
 
 ### Prerequisites
 
-- An Azure subscription.
-- An Azure Data Factory instance.
-- An Azure SQL Database with the required source tables.
-- Azure storage configured for data ingestion and processing.
-- An Azure Databricks workspace.
-- Appropriate Azure permissions and connectivity.
-- Basic knowledge of SQL, Python, PySpark, and Azure data services.
+To explore or recreate this project, you will need:
 
-### 1. Clone the repository
+- An Azure subscription.
+- Azure Data Factory.
+- Azure SQL Database.
+- Azure Data Lake Storage.
+- An Azure Databricks workspace.
+- Appropriate permissions to access and configure the services.
+- Git and GitHub for version control.
+
+Some services may incur costs depending on usage and configuration.
+
+### Step 1: Clone the Repository
 
 ```bash
 git clone https://github.com/malikareeba/SpotifyAzureProject.git
 cd SpotifyAzureProject
 ```
 
-### 2. Configure Azure resources
+### Step 2: Review the Data Factory Configuration
 
-Set up Azure Data Factory, Azure SQL Database, storage, and Azure Databricks as required by the pipeline.
+Explore the following folders:
 
-### 3. Configure linked services
+- `factory/`
+- `dataset/`
+- `linkedService/`
+- `pipeline/`
 
-Review `linkedService/` and update connection settings for your environment. Use secure authentication and secret management. Never commit passwords, access keys, or connection strings containing secrets to GitHub.
+Review the JSON definitions to understand how datasets, connections, and pipeline activities are configured.
 
-### 4. Configure datasets and pipelines
+### Step 3: Configure Azure Connections
 
-Review `dataset/`, `pipeline/`, and `factory/`. Update resource references, table names, parameters, and storage locations as required.
+Create or configure the required Azure SQL Database, Azure Data Lake Storage, and Azure Data Factory resources.
 
-### 5. Run the initial load
+Update connection settings and credentials for your own environment. Do not commit passwords, access keys, connection strings containing secrets, or other sensitive information.
 
-Publish the configured Azure Data Factory resources and execute the initial ingestion workflow. Validate the ingested source data.
+### Step 4: Review the SQL Scripts
 
-### 6. Execute incremental ingestion
+Open the scripts in `source_scripts/` to understand the initial and incremental source-data loading logic.
 
-Run the incremental pipeline according to the configured source queries and change-tracking logic. Verify that the expected records are processed.
+Make sure the required source tables and database permissions are available before running the pipelines.
 
-### 7. Process the Silver layer
+### Step 5: Run the Data Factory Pipelines
 
-Configure Databricks and execute the relevant PySpark transformations. Validate data types, deduplication, transformation results, and data quality checks.
+Import or recreate the pipeline definitions in your Azure Data Factory environment, configure the required linked services and datasets, and test the workflows.
 
-### 8. Build and validate the Gold layer
+Start with a controlled initial load, then validate incremental processing and looping.
 
-Execute the relevant Gold-layer processing logic and validate the fact and dimension tables.
+### Step 6: Explore Databricks Transformations
 
-*These are general setup steps. Execution requires the original project configurations, compatible Azure resources, and any notebooks or scripts maintained outside the repository.*
+Use the associated Databricks notebooks or code artifacts from your project to review the Silver transformations, Delta Lake processing, and Gold dimensional model.
 
-## 📊 Potential Analytical Use Cases
+**Note:** The repository tree above does not include Databricks notebook files, so these may need to be accessed from your Databricks workspace or added to the repository separately.
 
-The Gold-layer star schema can support use cases such as:
+## 📚 Key Learnings
 
-- Analysing streaming activity over time.
-- Exploring streaming trends across artists.
-- Comparing activity across tracks.
-- Analysing user activity.
-- Building reporting datasets based on available streaming attributes.
+Through this project, I developed practical experience with:
 
-These are potential use cases; actual results depend on the source data and available fields.
-
-## 🧠 Key Learnings
-
-Through this project, I gained practical experience with:
-
-- Designing an end-to-end cloud data pipeline.
-- Orchestrating ingestion using Azure Data Factory.
-- Working with Azure SQL Database as a source.
+- Designing an end-to-end data engineering pipeline on Azure.
 - Building initial and incremental ingestion workflows.
-- Implementing parameterisation, looping, and backfilling.
+- Using Azure Data Factory parameters, variables, loops, and conditional activities.
+- Understanding backfilling and change-tracking concepts.
+- Integrating Azure SQL Database with Azure Data Lake Storage.
+- Transforming data with PySpark and Delta Lake.
 - Applying the Bronze, Silver, and Gold Medallion Architecture.
-- Cleaning and transforming data with PySpark.
-- Working with Delta Lake and incremental processing.
-- Applying dimensional modelling and star schema concepts.
+- Designing fact and dimension tables using a star schema.
 - Understanding Slowly Changing Dimensions.
-- Implementing data quality checks.
-- Exploring streaming, governance, and deployment capabilities.
-- Managing project code using GitHub.
+- Automating pipeline notifications with Azure Logic Apps.
+- Organizing project configuration and code using GitHub.
 
-## 🔮 Potential Future Enhancements
+## 🔮 Future Improvements
 
-- Add automated unit and integration tests.
-- Improve pipeline logging, monitoring, and failure notifications.
-- Expand data quality rules and reconciliation checks.
-- Automate deployments through CI/CD workflows.
-- Add data lineage and schema documentation.
-- Build dashboards to visualise streaming activity.
-- Extend incremental processing and change data capture handling.
+Potential enhancements include:
 
-## 📚 Learning Journey
+- Implement automated testing for data quality and schema validation.
+- Add more detailed logging and centralized monitoring.
+- Introduce CI/CD deployment workflows.
+- Add Databricks notebooks and transformation code to the repository.
+- Improve error handling and retry strategies.
+- Add documentation for data lineage and table relationships.
+- Develop analytical dashboards using the Gold-layer datasets.
 
-This project was a major milestone in my **#100DaysOfDataEngineering** journey.
+## 👩‍💻 About This Project
 
-### Day 60 — Project kick-off
-- Created Azure resources.
-- Configured Azure SQL Database as a source.
-- Built incremental ingestion pipelines using Azure Data Factory.
-- Added backfilling functionality.
+This project was completed as part of my **#100DaysOfDataEngineering** learning journey.
 
-### Day 61 — Pipeline automation
-- Continued implementing backfilling.
-- Added looping to make pipeline execution more reusable.
-- Integrated Logic Apps with Azure Data Factory.
+It represents an important step in applying data engineering concepts to a practical cloud-based project, from source ingestion and incremental processing to transformation and analytical data modelling.
 
-### Day 63 — Project completion
-- Completed the end-to-end Spotify Azure Data Engineering Project.
-- Implemented Bronze-layer raw data ingestion.
-- Developed Silver-layer transformations using Azure Databricks and PySpark.
-- Created the Gold-layer dimensional data model.
-- Explored incremental processing, Delta Lake, SCDs, and additional Databricks capabilities.
-- Organised and published project code on GitHub.
-
-This journey helped me connect individual data engineering concepts and understand how they work together in a complete pipeline.
-
-## 👩‍💻 Author
-
-**Areeba Malik**  
-Aspiring Data Engineer | Computer Science Student | Azure Data Engineering
-
-- **GitHub:** [malikareeba](https://github.com/malikareeba)
-- **LinkedIn:** [Areeba Malik](https://www.linkedin.com/in/areeba-malik234/)
-- **Project Repository:** [SpotifyAzureProject](https://github.com/malikareeba/SpotifyAzureProject)
+I am continuing to build my skills in Azure, PySpark, SQL, and modern data engineering practices through hands-on projects.
 
 ## 🔗 Project Links
 
-- [GitHub Repository](https://github.com/malikareeba/SpotifyAzureProject)
-- [Azure Data Engineering Learning Tutorial](https://www.youtube.com/watch?v=vJM0wDrTRxI)
-
-## 🏷️ Tags
-
-`Azure` `AzureDataFactory` `AzureDatabricks` `AzureSQLDatabase` `PySpark` `Python` `SQL` `DeltaLake` `MedallionArchitecture` `DataEngineering` `IncrementalLoading` `DimensionalModelling` `DataPipeline` `GitHub` `100DaysOfDataEngineering`
+- **GitHub Repository:** [Spotify Azure Data Engineering Project](https://github.com/malikareeba/SpotifyAzureProject)
+- **LinkedIn:** [Areeba Malik](https://www.linkedin.com/in/areeba-malik234/)
 
 ---
 
-⭐ **Thank you for visiting my project!**
+⭐ If you find this project useful, feel free to explore the repository.
 
-This project represents an important step in my data engineering journey, bringing together cloud services, data ingestion, transformation, and dimensional modelling in an end-to-end solution.
+**#DataEngineering #Azure #AzureDataFactory #AzureDatabricks #PySpark #SQL #DeltaLake #DataPipeline #MedallionArchitecture #100DaysOfDataEngineering**
