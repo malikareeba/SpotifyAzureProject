@@ -244,43 +244,47 @@ SpotifyAzureProject/
 
 The following screenshots document the Azure resources, ingestion workflows, pipeline execution, notification setup, and Databricks work.
 
-### 1. Azure Resources
+## 1. Azure Resources
 
 The Azure environment contains the resources used to build the project, including Azure Data Factory, Azure SQL Database, Azure Databricks, and storage resources.
 
-![Azure resources dashboard](images/dashboardallresourcesfiles.jpg)
+![Azure resources dashboard](images/dashboard%20all%20resources%20files.jpg)
 
-### 2. Incremental Ingestion Pipeline
+## 2. Incremental Ingestion Pipeline
 
 The ingestion workflow uses lookup, copy, and conditional activities to process data incrementally.
 
-![Azure Data Factory incremental ingestion overview](images/bronze1.jpg)
+![Azure Data Factory incremental ingestion overview](images/bronze%201.jpg)
 
-### 3. Incremental Loop Pipeline | Pipeline Activities and CDC Logic 
+## 3. Incremental Loop Pipeline | Pipeline Activities and CDC Logic
 
-The looping workflow supports reusable processing across multiple inputs.The pipeline uses lookup and variable activities, data copying, conditional processing, and change-tracking logic to control incremental ingestion.The Azure Data Factory monitoring view shows pipeline execution details and activity statuses. Successful runs and failure notifications can be used to monitor and troubleshoot the workflow.
+The looping workflow supports reusable processing across multiple inputs. The pipeline uses lookup and variable activities, data copying, conditional processing, and change-tracking logic to control incremental ingestion. The Azure Data Factory monitoring view shows pipeline execution details and activity statuses. Successful runs and failure notifications help monitor and troubleshoot the workflow.
 
-![Azure Data Factory incremental loop pipeline](images/day2.2.jpg)
-![Azure Data Factory incremental loop activities](images/DAY2.1.jpg)
+![Azure Data Factory incremental loop pipeline](images/day%202.2.jpg)
 
-### 4. Logic Apps Email Notifications
+![Azure Data Factory incremental loop activities](images/DAY%202.1.jpg)
+
+## 4. Logic Apps Email Notifications
 
 The Logic App workflow uses an HTTP request trigger and an email action to support pipeline notifications.
 
-![Azure Logic Apps HTTP and email workflow](images/DAY2.jpg)
-![Azure Logic Apps HTTP and email workflow](images/day2.3.jpg)
+![Azure Logic Apps HTTP and email workflow](images/DAY%202.jpg)
 
-### 5. Databricks Silver and Gold Layers
+![Azure Logic Apps HTTP and email workflow](images/day%202.3.jpg)
+
+## 5. Databricks Silver and Gold Layers
 
 The Databricks workspace supports data transformation and dimensional modelling, including the date dimension and streaming fact table.
 
+![Azure Databricks Silver and Gold tables](images/day%2062.3.jpg)
 
-![Azure Databricks Silver and Gold tables](images/day62.3.jpg)
-![Azure Databricks Silver and Gold tables](images/day62.4.jpg)
-![Azure Databricks Silver and Gold tables](images/day62.5.jpg)
-![Azure Databricks Silver and Gold tables](images/day63.1.jpg)
-![Azure Databricks Silver and Gold tables](images/day63.2.jpg)
+![Azure Databricks Silver and Gold tables](images/day%2062.4.jpg)
 
+![Azure Databricks Silver and Gold tables](images/day%2062.5.jpg)
+
+![Azure Databricks Silver and Gold tables](images/DAY%2063.1%20testing.jpg)
+
+![Azure Databricks Silver and Gold tables](images/DAY%2063.2%20testing%20pt2.jpg)
 
 ## 🚀 How to Explore the Project
 
