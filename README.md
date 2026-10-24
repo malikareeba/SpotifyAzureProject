@@ -1,4 +1,4 @@
-# 🎵 Spotify Azure Data Engineering Project
+#  Spotify Azure Data Engineering Project
 
 An end-to-end data engineering project built using **Azure Data Factory, Azure SQL Database, Azure Data Lake Storage, Azure Databricks, PySpark, and Delta Lake**. This project demonstrates how to build automated data pipelines for Spotify streaming data using the Medallion Architecture, incremental ingestion, data transformation, and dimensional data modelling.
 
@@ -8,7 +8,7 @@ The goal of this project was to design and implement a complete data engineering
 
 The project brings together the data engineering concepts I learned during my **#100DaysOfDataEngineering** journey and applies them in an end-to-end cloud project.
 
-### 🎯 Project Objectives
+###  Project Objectives
 
 - Build an end-to-end data ingestion pipeline using Azure Data Factory.
 - Use Azure SQL Database as a source for Spotify data.
@@ -21,7 +21,7 @@ The project brings together the data engineering concepts I learned during my **
 - Configure automated email notifications for pipeline failures.
 - Explore advanced data engineering concepts, including Structured Streaming, Auto Loader, Unity Catalog, Delta Live Tables, and Databricks Asset Bundles.
 
-## 🏗️ Architecture
+##  Architecture
 
 The project follows the **Medallion Architecture**, organizing data into three layers.
 
@@ -248,19 +248,19 @@ The following screenshots document the Azure resources, ingestion workflows, pip
 
 The Azure environment contains the resources used to build the project, including Azure Data Factory, Azure SQL Database, Azure Databricks, and storage resources.
 
-![Azure resources dashboard](images/azure-resources-dashboard.jpg)
+![Azure resources dashboard](images/dashboard all resources files.jpg)
 
 ### 2. Incremental Ingestion Pipeline
 
 The ingestion workflow uses lookup, copy, and conditional activities to process data incrementally.
 
-![Azure Data Factory incremental ingestion overview](images/adf-incremental-ingestion-overview.jpg)
+![Azure Data Factory incremental ingestion overview](images/bronze 1.jpg)
 
 ### 3. Incremental Loop Pipeline
 
 The looping workflow supports reusable processing across multiple inputs.
 
-![Azure Data Factory incremental loop pipeline](images/adf-incremental-loop-pipeline.jpg)
+![Azure Data Factory incremental loop pipeline](images/day 2.2.jpg)
 
 ### 4. Pipeline Activities and CDC Logic
 
@@ -278,7 +278,7 @@ The Azure Data Factory monitoring view shows pipeline execution details and acti
 
 The Logic App workflow uses an HTTP request trigger and an email action to support pipeline notifications.
 
-![Azure Logic Apps HTTP and email workflow](images/logic-app-http-email-workflow.jpg)
+![Azure Logic Apps HTTP and email workflow](images/day 2.3.jpg)
 
 ### 7. Databricks Silver and Gold Layers
 
